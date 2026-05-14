@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCOOPTHERAPIE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Chewy&family=Fredoka:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --pink-1: #ffffff;
+      --pink-2: #ffd9e8;
+      --pink-3: #f8b7cf;
+      --pink-4: #ffdceb;
+      --rose: #dd7b95;
+      --coral: #ea5d62;
+      --blue: #5babe0;
+      --blue-dark: #4592c5;
+      --mint: #8bc0b2;
+      --mint-dark: #6ea798;
+      --cream: #fffce5;
+      --yellow: #ffe89a;
+      --brown: #9f6b4d;
+      --choco: #8b5a44;
+      --white: #ffffff;
+      --shadow: rgba(154, 78, 108, 0.22);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Fredoka", sans-serif;
+      color: var(--brown);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.95) 0 8%, transparent 20%),
+        radial-gradient(circle at 88% 24%, rgba(255,255,255,.9) 0 7%, transparent 18%),
+        radial-gradient(circle at 16% 78%, rgba(255,255,255,.9) 0 9%, transparent 22%),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,.75) 0 8%, transparent 20%),
+        linear-gradient(135deg, #ffffff 0%, #ffd9e8 23%, #f8b7cf 50%, #ffdceb 75%, #ffffff 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 520px;
+      height: 180px;
+      border-radius: 999px;
+      filter: blur(20px);
+      opacity: .55;
+      background:
+        radial-gradient(ellipse at 20% 55%, rgba(255,255,255,.95) 0 25%, transparent 58%),
+        radial-gradient(ellipse at 50% 40%, rgba(255,255,255,.85) 0 30%, transparent 62%),
+        radial-gradient(ellipse at 78% 58%, rgba(255,255,255,.9) 0 25%, transparent 58%);
+      pointer-events: none;
+    }
+
+    body::before {
+      top: 13%;
+      left: -120px;
+      transform: rotate(-8deg);
+    }
+
+    body::after {
+      right: -120px;
+      bottom: 12%;
+      transform: rotate(8deg);
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+    }
+
+    .hide {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      visibility: hidden !important;
+    }
+
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.95) 0 8%, transparent 20%),
+        radial-gradient(circle at 88% 24%, rgba(255,255,255,.9) 0 7%, transparent 18%),
+        radial-gradient(circle at 16% 78%, rgba(255,255,255,.9) 0 9%, transparent 22%),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,.75) 0 8%, transparent 20%),
+        linear-gradient(135deg, #ffffff 0%, #ffd9e8 23%, #f8b7cf 50%, #ffdceb 75%, #ffffff 100%);
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .page-loader.hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .icecream-loader {
+      position: relative;
+      width: 260px;
+      height: 470px;
+      z-index: 2;
+    }
+
+    .nozzle {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 24px;
+      background: linear-gradient(180deg, #8c9199, #666b72);
+      border-radius: 12px;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+      z-index: 20;
+    }
+
+    .nozzle::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -8px;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 12px;
+      background: #666b72;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .loader-pour {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      border-radius: 999px;
+      opacity: 0;
+      z-index: 15;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
+    }
+
+    .loader-pour.bottom {
+      top: 42px;
+      height: 190px;
+      background: linear-gradient(180deg, #ff84ad, #ff5e91);
+      animation: pourBottom 4.8s infinite ease-in-out;
+    }
+
+    .loader-pour.middle {
+      top: 42px;
+      height: 132px;
+      background: linear-gradient(180deg, #ffe48a, #ffd04a);
+      animation: pourMiddle 4.8s infinite ease-in-out;
+    }
+
+    .loader-pour.top {
+      top: 42px;
+      height: 82px;
+      background: linear-gradient(180deg, #95edca, #57d5a0);
+      animation: pourTop 4.8s infinite ease-in-out;
+    }
+
+    .loader-cone {
+      position: absolute;
+      left: 50%;
+      bottom: 70px;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 150px;
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(140, 85, 40, 0.18) 0px,
+          rgba(140, 85, 40, 0.18) 8px,
+          rgba(255,255,255,0.08) 8px,
+          rgba(255,255,255,0.08) 16px
+        ),
+        linear-gradient(180deg, #e6b67c, #c98947);
+      box-shadow: inset 0 6px 10px rgba(255,255,255,0.25);
+      z-index: 1;
+    }
+
+    .loader-scoop {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      overflow: hidden;
+      background: linear-gradient(180deg, #dedede, #cfcfcf);
+      border-radius: 50% 50% 42% 42% / 58% 58% 42% 42%;
+      box-shadow:
+        inset 0 8px 10px rgba(255,255,255,0.5),
+        0 10px 18px rgba(0,0,0,0.08);
+    }
+
+    .loader-scoop::after {
+      content: "";
+      position: absolute;
+      width: 40%;
+      height: 28%;
+      top: 12%;
+      left: 16%;
+      background: rgba(255,255,255,0.28);
+      border-radius: 50%;
+      filter: blur(2px);
+      z-index: 3;
+    }
+
+    .loader-scoop.bottom {
+      width: 136px;
+      height: 96px;
+      bottom: 168px;
+      z-index: 5;
+    }
+
+    .loader-scoop.middle {
+      width: 116px;
+      height: 84px;
+      bottom: 235px;
+      z-index: 6;
+    }
+
+    .loader-scoop.top {
+      width: 96px;
+      height: 72px;
+      bottom: 294px;
+      z-index: 7;
+    }
+
+    .loader-fill {
+      position: absolute;
+      inset: 0;
+      transform-origin: bottom center;
+      transform: scaleY(0);
+      border-radius: inherit;
+      z-index: 2;
+    }
+
+    .loader-scoop.bottom .loader-fill {
+      background: linear-gradient(180deg, #ff8db3 0%, #ff6c99 100%);
+      animation: fillBottom 4.8s infinite ease-in-out;
+    }
+
+    .loader-scoop.middle .loader-fill {
+      background: linear-gradient(180deg, #ffe99d 0%, #ffd85c 100%);
+      animation: fillMiddle 4.8s infinite ease-in-out;
+    }
+
+    .loader-scoop.top .loader-fill {
+      background: linear-gradient(180deg, #9cf0d0 0%, #65dcaa 100%);
+      animation: fillTop 4.8s infinite ease-in-out;
+    }
+
+    .loading-text {
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      font-family: "Kalam", cursive;
+      font-size: 22px;
+      font-weight: 700;
+      color: #8a5a35;
+      letter-spacing: 1px;
+      animation: pulseText 1.2s infinite ease-in-out;
+    }
+
+    .loading-dots::after {
+      content: "";
+      animation: dots 1.4s infinite steps(4);
+    }
+
+    @keyframes pourBottom {
+      0%, 8% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: top;
+      }
+
+      12%, 30% {
+        opacity: 1;
+        transform: translateX(-50%) scaleY(1);
+        transform-origin: top;
+      }
+
+      36%, 100% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    @keyframes pourMiddle {
+      0%, 32% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: top;
+      }
+
+      38%, 56% {
+        opacity: 1;
+        transform: translateX(-50%) scaleY(1);
+        transform-origin: top;
+      }
+
+      62%, 100% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    @keyframes pourTop {
+      0%, 58% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: top;
+      }
+
+      64%, 82% {
+        opacity: 1;
+        transform: translateX(-50%) scaleY(1);
+        transform-origin: top;
+      }
+
+      88%, 100% {
+        opacity: 0;
+        transform: translateX(-50%) scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    @keyframes fillBottom {
+      0%, 12% {
+        transform: scaleY(0);
+      }
+
+      30%, 100% {
+        transform: scaleY(1);
+      }
+    }
+
+    @keyframes fillMiddle {
+      0%, 38% {
+        transform: scaleY(0);
+      }
+
+      56%, 100% {
+        transform: scaleY(1);
+      }
+    }
+
+    @keyframes fillTop {
+      0%, 64% {
+        transform: scaleY(0);
+      }
+
+      82%, 100% {
+        transform: scaleY(1);
+      }
+    }
+
+    @keyframes pulseText {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.75;
+      }
+
+      50% {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+    }
+
+    @keyframes dots {
+      0% {
+        content: "";
+      }
+
+      25% {
+        content: ".";
+      }
+
+      50% {
+        content: "..";
+      }
+
+      75%, 100% {
+        content: "...";
+      }
+    }
+
+    .site {
+      min-height: 100vh;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+
+    .site.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .language-switch {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      border: 3px solid rgba(255,255,255,.8);
+      box-shadow: 0 14px 35px rgba(154,78,108,.16);
+      backdrop-filter: blur(12px);
+    }
+
+    .lang-btn {
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-family: "Chewy", cursive;
+      font-size: 18px;
+      color: var(--brown);
+      background: rgba(255,255,255,.7);
+      box-shadow: inset 0 -3px 0 rgba(154,78,108,.1);
+      transition: .2s ease;
+    }
+
+    .lang-btn:hover {
+      transform: translateY(-2px);
+      background: var(--cream);
+    }
+
+    .lang-btn.active {
+      color: white;
+      background: linear-gradient(180deg, var(--mint), var(--mint-dark));
+      box-shadow: 0 5px 0 #5b968a;
+    }
+
+    .landing {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 28px 18px;
+      position: relative;
+    }
+
+    .sprinkle {
+      position: absolute;
+      width: 44px;
+      height: 12px;
+      border-radius: 999px;
+      opacity: .8;
+      animation: floaty 4s ease-in-out infinite;
+    }
+
+    .sprinkle.a { top: 15%; left: 10%; background: var(--mint); transform: rotate(20deg); }
+    .sprinkle.b { top: 22%; right: 13%; background: var(--yellow); transform: rotate(-24deg); animation-delay: .4s; }
+    .sprinkle.c { bottom: 18%; left: 12%; background: var(--blue); transform: rotate(-12deg); animation-delay: .7s; }
+    .sprinkle.d { bottom: 24%; right: 9%; background: var(--coral); transform: rotate(18deg); animation-delay: 1s; }
+
+    @keyframes floaty {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -16px; }
+    }
+
+    .landing-card {
+      width: min(760px, 94vw);
+      text-align: center;
+      padding: clamp(28px, 6vw, 58px);
+      border-radius: 48px;
+      background: rgba(255,255,255,.48);
+      border: 4px solid rgba(255,255,255,.75);
+      box-shadow: 0 26px 70px var(--shadow);
+      backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .landing-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 64px;
+      background:
+        radial-gradient(circle at 30px 0, var(--cream) 0 30px, transparent 31px),
+        radial-gradient(circle at 92px 0, var(--cream) 0 34px, transparent 35px),
+        radial-gradient(circle at 165px 0, var(--cream) 0 28px, transparent 29px),
+        linear-gradient(var(--cream), var(--cream));
+      background-size: 210px 64px;
+      opacity: .95;
+    }
+
+    .triple-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cups-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .triple-logo-landing {
+      margin: 14px auto 16px;
+    }
+
+    .triple-logo-landing .cups-row {
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .triple-logo-topbar .cups-row {
+      gap: 5px;
+    }
+
+    .ice-cup {
+      position: relative;
+      width: 72px;
+      height: 86px;
+      animation: cupBob 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 10px 14px rgba(154, 78, 108, 0.16));
+    }
+
+    .triple-logo-topbar .ice-cup {
+      width: 28px;
+      height: 34px;
+      filter: drop-shadow(0 4px 6px rgba(154, 78, 108, 0.12));
+    }
+
+    .ice-cup:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .ice-cup:nth-child(2) {
+      animation-delay: .35s;
+    }
+
+    .ice-cup:nth-child(3) {
+      animation-delay: .7s;
+    }
+
+    .ice-bowl {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 72px;
+      height: 34px;
+      transform: translateX(-50%);
+      border-radius: 0 0 28px 28px / 0 0 22px 22px;
+      border: 4px solid rgba(255,255,255,.92);
+      background: linear-gradient(180deg, #fffefc 0%, #ffe7f0 100%);
+      box-shadow: inset 0 -6px 0 rgba(221,123,149,.12);
+    }
+
+    .triple-logo-topbar .ice-bowl {
+      width: 28px;
+      height: 14px;
+      border-width: 2px;
+      border-radius: 0 0 12px 12px / 0 0 8px 8px;
+      box-shadow: inset 0 -2px 0 rgba(221,123,149,.12);
+    }
+
+    .ice-scoop {
+      position: absolute;
+      width: 30px;
+      height: 28px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,.92);
+      box-shadow: inset 0 4px 8px rgba(255,255,255,.35);
+    }
+
+    .ice-scoop::after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 7px;
+      width: 12px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.45);
+      transform: rotate(-10deg);
+    }
+
+    .triple-logo-topbar .ice-scoop {
+      width: 12px;
+      height: 11px;
+      border-width: 2px;
+    }
+
+    .triple-logo-topbar .ice-scoop::after {
+      top: 2px;
+      left: 3px;
+      width: 5px;
+      height: 2px;
+    }
+
+    .ice-cup .scoop-a {
+      left: 8px;
+      bottom: 22px;
+    }
+
+    .ice-cup .scoop-b {
+      right: 8px;
+      bottom: 22px;
+    }
+
+    .triple-logo-topbar .ice-cup .scoop-a {
+      left: 3px;
+      bottom: 9px;
+    }
+
+    .triple-logo-topbar .ice-cup .scoop-b {
+      right: 3px;
+      bottom: 9px;
+    }
+
+    .strawberry .scoop-a,
+    .strawberry .scoop-b {
+      background: linear-gradient(180deg, #ff9bc0, #ff6f9f);
+    }
+
+    .vanilla .scoop-a,
+    .vanilla .scoop-b {
+      background: linear-gradient(180deg, #fff8d9, #ffd98b);
+    }
+
+    .matcha .scoop-a,
+    .matcha .scoop-b {
+      background: linear-gradient(180deg, #a8f5d7, #65dcaa);
+    }
+
+    .strawberry .ice-bowl {
+      background: linear-gradient(180deg, #fffdfd 0%, #ffe1ea 100%);
+    }
+
+    .vanilla .ice-bowl {
+      background: linear-gradient(180deg, #fffef7 0%, #fff1cf 100%);
+    }
+
+    .matcha .ice-bowl {
+      background: linear-gradient(180deg, #fafffb 0%, #def7ee 100%);
+    }
+
+    @keyframes cupBob {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    .brand {
+      font-family: "Boogaloo", cursive;
+      font-size: clamp(58px, 11vw, 116px);
+      line-height: .82;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow:
+        3px 3px 0 var(--blue-dark),
+        -3px 3px 0 var(--blue-dark),
+        3px -3px 0 var(--blue-dark),
+        -3px -3px 0 var(--blue-dark),
+        0 9px 0 rgba(255,255,255,.85);
+      position: relative;
+      z-index: 1;
+    }
+
+    .tagline {
+      width: min(560px, 100%);
+      margin: 24px auto 28px;
+      font-family: "Kalam", cursive;
+      font-size: clamp(20px, 4vw, 28px);
+      line-height: 1.2;
+      color: var(--coral);
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .start-btn,
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 170px;
+      padding: 15px 28px;
+      border-radius: 999px;
+      color: white;
+      font-family: "Chewy", cursive;
+      font-size: 26px;
+      letter-spacing: 1px;
+      background: linear-gradient(180deg, var(--mint), var(--mint-dark));
+      box-shadow: 0 10px 0 #5b968a, 0 18px 25px rgba(91,150,138,.25);
+      transition: transform .2s ease, box-shadow .2s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .start-btn:hover,
+    .back-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 0 #5b968a, 0 24px 30px rgba(91,150,138,.25);
+    }
+
+    .main-page {
+      display: none;
+      min-height: 100vh;
+      padding: 24px 18px 56px;
+    }
+
+    .main-page.show {
+      display: block;
+    }
+
+    .topbar {
+      width: min(1120px, 94vw);
+      margin: 0 auto 20px;
+      padding: 14px 16px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255,255,255,.48);
+      border: 3px solid rgba(255,255,255,.75);
+      box-shadow: 0 16px 40px rgba(154,78,108,.14);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 14px;
+      z-index: 10;
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Boogaloo", cursive;
+      font-size: clamp(24px, 4vw, 34px);
+      color: var(--blue);
+      text-shadow: 1.5px 1.5px 0 var(--blue-dark);
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--brown);
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      transition: .2s ease;
+    }
+
+    .nav a:hover {
+      background: var(--cream);
+      transform: translateY(-2px);
+    }
+
+    .hero-main {
+      width: min(1120px, 94vw);
+      margin: 0 auto 20px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border-radius: 42px;
+      background: rgba(255,255,255,.5);
+      border: 4px solid rgba(255,255,255,.78);
+      box-shadow: 0 24px 65px rgba(154,78,108,.16);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .intro-panel {
+      padding: clamp(28px, 5vw, 50px);
+      position: relative;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 15px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: var(--rose);
+      font-weight: 700;
+      box-shadow: inset 0 -3px 0 rgba(221,123,149,.16);
+      margin-bottom: 18px;
+    }
+
+    .main-title {
+      font-family: "Boogaloo", cursive;
+      font-size: clamp(52px, 8vw, 92px);
+      line-height: .86;
+      color: var(--blue);
+      text-transform: uppercase;
+      text-shadow:
+        2px 2px 0 var(--blue-dark),
+        -2px 2px 0 var(--blue-dark),
+        2px -2px 0 var(--blue-dark),
+        -2px -2px 0 var(--blue-dark),
+        0 7px 0 rgba(255,255,255,.8);
+      margin-bottom: 18px;
+    }
+
+    .main-desc {
+      font-family: "Kalam", cursive;
+      font-size: clamp(20px, 3vw, 26px);
+      line-height: 1.35;
+      color: var(--coral);
+      font-weight: 700;
+    }
+
+    .flavor-window {
+      min-height: 410px;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      position: relative;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.75), transparent 28%),
+        radial-gradient(circle at 80% 70%, rgba(255,252,229,.7), transparent 32%),
+        rgba(255,255,255,.38);
+    }
+
+    .big-sundae {
+      width: min(310px, 80vw);
+      height: 360px;
+      position: relative;
+    }
+
+    .cup {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 230px;
+      height: 150px;
+      transform: translateX(-50%);
+      border-radius: 0 0 70px 70px;
+      background: linear-gradient(180deg, #fffce5, #ffd9e8);
+      border: 5px solid white;
+      box-shadow: inset 0 -12px 0 rgba(221,123,149,.16);
+    }
+
+    .sundae-scoop {
+      position: absolute;
+      border: 5px solid white;
+      border-radius: 50%;
+      box-shadow: 0 14px 25px rgba(154,78,108,.14);
+    }
+
+    .sundae-scoop.pink {
+      width: 145px;
+      height: 128px;
+      left: 38px;
+      top: 90px;
+      background: linear-gradient(180deg, #ff9bc0, #ff6f9f);
+    }
+
+    .sundae-scoop.yellow {
+      width: 140px;
+      height: 125px;
+      right: 34px;
+      top: 96px;
+      background: linear-gradient(180deg, #fff0a8, #ffd85c);
+    }
+
+    .sundae-scoop.mint {
+      width: 132px;
+      height: 120px;
+      left: 88px;
+      top: 22px;
+      background: linear-gradient(180deg, #a8f5d7, #65dcaa);
+    }
+
+    .cherry {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #ea5d62;
+      border: 4px solid white;
+      box-shadow: 0 8px 12px rgba(154,78,108,.16);
+    }
+
+    .cherry::before {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 34px;
+      border-radius: 50%;
+      border-left: 4px solid #6ea798;
+      left: 15px;
+      top: -28px;
+      transform: rotate(20deg);
+    }
+
+    .content-grid {
+      width: min(1120px, 94vw);
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .section {
+      padding: clamp(24px, 4vw, 38px);
+      position: relative;
+    }
+
+    .section-title {
+      font-family: "Chewy", cursive;
+      font-size: clamp(34px, 6vw, 54px);
+      color: var(--rose);
+      margin-bottom: 14px;
+      text-shadow: 0 4px 0 rgba(255,255,255,.75);
+    }
+
+    .section-text {
+      font-size: clamp(17px, 2.5vw, 21px);
+      line-height: 1.6;
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    .concept-story {
+      margin-top: 18px;
+      padding: 24px;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 12% 20%, rgba(255,255,255,.9) 0 12%, transparent 28%),
+        linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,252,229,.62));
+      border: 3px dashed rgba(221,123,149,.45);
+      box-shadow: inset 0 -8px 0 rgba(255,217,232,.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .concept-story::after {
+      content: "🍦";
+      position: absolute;
+      right: 22px;
+      bottom: 16px;
+      font-size: 54px;
+      opacity: .22;
+      transform: rotate(-12deg);
+    }
+
+    .concept-story p {
+      position: relative;
+      z-index: 1;
+      font-family: "Kalam", cursive;
+      font-size: clamp(20px, 2.8vw, 27px);
+      line-height: 1.45;
+      color: var(--coral);
+      font-weight: 700;
+    }
+
+    .flavor-note-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .flavor-note {
+      min-height: 120px;
+      padding: 18px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.62);
+      border: 3px solid rgba(255,255,255,.86);
+      box-shadow: 0 14px 30px rgba(154,78,108,.12);
+      text-align: center;
+      transition: .22s ease;
+    }
+
+    .flavor-note:hover {
+      transform: translateY(-6px) rotate(-1deg);
+      background: var(--cream);
+    }
+
+    .flavor-note span {
+      display: block;
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .flavor-note h3 {
+      font-family: "Chewy", cursive;
+      font-size: 25px;
+      color: var(--blue);
+      margin-bottom: 5px;
+    }
+
+    .flavor-note p {
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 600;
+      color: var(--brown);
+    }
+
+    .rules-menu {
+      display: grid;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .rule-shelf {
+      padding: 22px;
+      border-radius: 36px;
+      background: rgba(255,255,255,.58);
+      border: 3px solid rgba(255,255,255,.86);
+      box-shadow: 0 16px 36px rgba(154,78,108,.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rule-shelf::before {
+      content: "";
+      position: absolute;
+      top: -24px;
+      right: -24px;
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      background: rgba(255,217,232,.7);
+    }
+
+    .rule-shelf-title {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      font-family: "Chewy", cursive;
+      font-size: clamp(27px, 4vw, 38px);
+      color: var(--rose);
+      text-shadow: 0 4px 0 rgba(255,255,255,.72);
+    }
+
+    .rule-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .rule-list li {
+      padding: 13px 15px 13px 46px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.68);
+      border: 2px solid rgba(255,255,255,.82);
+      font-size: 16.5px;
+      line-height: 1.45;
+      font-weight: 600;
+      color: var(--brown);
+      position: relative;
+    }
+
+    .rule-list li::before {
+      content: "🍨";
+      position: absolute;
+      left: 14px;
+      top: 12px;
+      font-size: 20px;
+    }
+
+    .rule-list.warning li::before {
+      content: "⚠️";
+    }
+
+    .rule-list.chill li::before {
+      content: "❄️";
+    }
+
+    .rules-mini-note {
+      margin-top: 17px;
+      padding: 18px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255,252,229,.9), rgba(255,217,232,.75));
+      border: 3px dashed rgba(221,123,149,.42);
+      font-family: "Kalam", cursive;
+      font-size: 22px;
+      line-height: 1.35;
+      color: var(--coral);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .caretaker-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .caretaker {
+      padding: 18px;
+      border-radius: 30px;
+      background: rgba(255,255,255,.62);
+      border: 3px solid rgba(255,255,255,.88);
+      text-align: center;
+      box-shadow: 0 14px 30px rgba(154,78,108,.12);
+    }
+
+
+
+    .scooper-photo-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      padding: 10px;
+      margin: 0 auto 14px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,.9) 0 12%, transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,217,232,.65));
+      border: 4px solid rgba(255,255,255,.92);
+      box-shadow: 0 14px 28px rgba(154,78,108,.14);
+      overflow: hidden;
+      position: relative;
+      transition: transform .22s ease;
+    }
+
+    .scooper-photo-wrap::after {
+      content: "🍦";
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      font-size: 28px;
+      opacity: .75;
+      filter: drop-shadow(0 3px 0 rgba(255,255,255,.8));
+    }
+
+    .scooper-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 20px;
+      background: rgba(255,255,255,.5);
+    }
+
+    .caretaker {
+      transition: transform .22s ease, background .22s ease;
+    }
+
+    .caretaker:hover {
+      transform: translateY(-6px);
+      background: rgba(255,252,229,.72);
+    }
+
+    .caretaker:hover .scooper-photo-wrap {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 12px;
+      border-radius: 50% 50% 46% 46%;
+      border: 5px solid white;
+      box-shadow: 0 12px 18px rgba(154,78,108,.14);
+      position: relative;
+    }
+
+    .avatar::after {
+      content: "";
+      position: absolute;
+      width: 42px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      left: 17px;
+      top: 19px;
+      transform: rotate(-10deg);
+    }
+
+    .avatar.vanilla { background: linear-gradient(180deg, #fffce5, #ffd98b); }
+    .avatar.strawberry { background: linear-gradient(180deg, #ff9bc0, #ff6f9f); }
+    .avatar.matcha { background: linear-gradient(180deg, #a8f5d7, #65dcaa); }
+    .avatar.blueberry { background: linear-gradient(180deg, #9bd7ff, #5babe0); }
+
+    .caretaker h3 {
+      font-family: "Chewy", cursive;
+      color: var(--rose);
+      font-size: 27px;
+      margin-bottom: 4px;
+    }
+
+    .caretaker p {
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .footer {
+      width: min(1120px, 94vw);
+      margin: 22px auto 0;
+      padding: 24px;
+      border-radius: 36px;
+      text-align: center;
+      background: rgba(255,255,255,.45);
+      border: 3px solid rgba(255,255,255,.75);
+      box-shadow: 0 16px 40px rgba(154,78,108,.13);
+    }
+
+    .footer p {
+      font-family: "Kalam", cursive;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--coral);
+    }
+
+    @media (max-width: 860px) {
+      .hero-main {
+        grid-template-columns: 1fr;
+      }
+
+      .caretaker-list,
+      .flavor-note-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .topbar {
+        border-radius: 28px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .language-switch {
+        top: 12px;
+        right: 12px;
+        transform: scale(.92);
+        transform-origin: top right;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .landing-card {
+        border-radius: 36px;
+        padding-top: 34px;
+      }
+
+      .brand {
+        font-size: 54px;
+      }
+
+      .tagline {
+        font-size: 20px;
+      }
+
+      .caretaker-list,
+      .flavor-note-row {
+        grid-template-columns: 1fr;
+      }
+
+      .flavor-window {
+        min-height: 340px;
+      }
+
+      .big-sundae {
+        transform: scale(.82);
+      }
+
+      .nav a {
+        font-size: 14px;
+        padding: 9px 11px;
+      }
+
+      .icecream-loader {
+        transform: scale(.88);
+      }
+
+      .triple-logo-landing .ice-cup {
+        width: 58px;
+        height: 72px;
+      }
+
+      .triple-logo-landing .ice-bowl {
+        width: 58px;
+        height: 29px;
+      }
+
+      .triple-logo-landing .ice-scoop {
+        width: 25px;
+        height: 24px;
+      }
+
+      .triple-logo-landing .ice-cup .scoop-a {
+        left: 6px;
+        bottom: 18px;
+      }
+
+      .triple-logo-landing .ice-cup .scoop-b {
+        right: 6px;
+        bottom: 18px;
+      }
+
+      .rule-shelf {
+        padding: 18px;
+        border-radius: 30px;
+      }
+
+      .rule-list li {
+        font-size: 15.5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-loader" id="loader">
+    <div class="icecream-loader">
+      <div class="nozzle"></div>
+
+      <div class="loader-pour bottom"></div>
+      <div class="loader-pour middle"></div>
+      <div class="loader-pour top"></div>
+
+      <div class="loader-scoop top">
+        <div class="loader-fill"></div>
+      </div>
+
+      <div class="loader-scoop middle">
+        <div class="loader-fill"></div>
+      </div>
+
+      <div class="loader-scoop bottom">
+        <div class="loader-fill"></div>
+      </div>
+
+      <div class="loader-cone"></div>
+
+      <div class="loading-text">
+        mixing sweet feelings<span class="loading-dots"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="language-switch" id="languageSwitch">
+    <button class="lang-btn active" data-lang="en">ENG</button>
+    <button class="lang-btn" data-lang="id">INA</button>
+  </div>
+  
+  <audio id="bgMusic" loop preload="auto">
+    <source src="LINK_LAGU_KAMU.mp3" type="audio/mpeg">
+  </audio>
+
+  <main class="site" id="site">
+    <section class="landing" id="landing">
+      <span class="sprinkle a"></span>
+      <span class="sprinkle b"></span>
+      <span class="sprinkle c"></span>
+      <span class="sprinkle d"></span>
+
+      <div class="landing-card">
+        <div class="triple-logo triple-logo-landing">
+          <div class="cups-row">
+            <div class="ice-cup strawberry">
+              <div class="ice-scoop scoop-a"></div>
+              <div class="ice-scoop scoop-b"></div>
+              <div class="ice-bowl"></div>
+            </div>
+
+            <div class="ice-cup vanilla">
+              <div class="ice-scoop scoop-a"></div>
+              <div class="ice-scoop scoop-b"></div>
+              <div class="ice-bowl"></div>
+            </div>
+
+            <div class="ice-cup matcha">
+              <div class="ice-scoop scoop-a"></div>
+              <div class="ice-scoop scoop-b"></div>
+              <div class="ice-bowl"></div>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="brand">SCOOP<br>THERAPIE</h1>
+
+        <p class="tagline" data-i18n="landingTagline">
+          A tiny ice cream corner for tired hearts, soft friendships, and sweet little moments.
+        </p>
+
+        <button class="start-btn" id="startBtn" data-i18n="startBtn">START</button>
+      </div>
+    </section>
+
+    <section class="main-page" id="mainPage">
+      <header class="topbar">
+        <div class="topbar-logo">
+          <div class="triple-logo triple-logo-topbar">
+            <div class="cups-row">
+              <div class="ice-cup strawberry">
+                <div class="ice-scoop scoop-a"></div>
+                <div class="ice-scoop scoop-b"></div>
+                <div class="ice-bowl"></div>
+              </div>
+
+              <div class="ice-cup vanilla">
+                <div class="ice-scoop scoop-a"></div>
+                <div class="ice-scoop scoop-b"></div>
+                <div class="ice-bowl"></div>
+              </div>
+
+              <div class="ice-cup matcha">
+                <div class="ice-scoop scoop-a"></div>
+                <div class="ice-scoop scoop-b"></div>
+                <div class="ice-bowl"></div>
+              </div>
+            </div>
+          </div>
+
+          <span>SCOOPTHERAPIE</span>
+        </div>
+
+        <nav class="nav">
+          <a href="#concept" data-i18n="navConcept">Concept</a>
+          <a href="#scoopers" data-i18n="navScoopers">Scoopers</a>
+          <a href="#rules" data-i18n="navRules">Rules</a>
+        </nav>
+      </header>
+
+      <section class="hero-main">
+        <div class="panel intro-panel">
+          <div class="badge" data-i18n="badge">🍦 welcome to our soft corner</div>
+
+          <h2 class="main-title" data-i18n="mainTitle">ICE CREAM<br>FOR YOUR MOOD</h2>
+
+          <p class="main-desc" data-i18n="mainDesc">
+            SCOOPTHERAPIE is a tiny place made to be a sweet resting space. Here, every flavor has a story, every color has a feeling, and everyone is welcome to show up as themselves.
+          </p>
+        </div>
+
+        <div class="panel flavor-window">
+          <div class="big-sundae">
+            <div class="cherry"></div>
+            <div class="sundae-scoop mint"></div>
+            <div class="sundae-scoop pink"></div>
+            <div class="sundae-scoop yellow"></div>
+            <div class="cup"></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel section" id="concept">
+          <h2 class="section-title" data-i18n="conceptTitle">Our Concept 🍨</h2>
+
+          <div class="concept-story">
+            <p data-i18n="conceptStory">
+              When was the last time you truly paused and gave yourself space to feel a little lighter? This little ice cream shop is here to ease the weight of tiring days, with warm lights, bright colors, and a comforting space that welcomes you in. Like different flavors on display, friendships come in many forms, each bringing their own sweetness, energy, and charm. Here, laughter is shared easily, stories are always welcome, and sweet memories are made together. Because sometimes, the best kind of healing comes from simple things with a cold scoop of ice cream and people who choose to stay.
+            </p>
+          </div>
+
+          <div class="flavor-note-row">
+            <div class="flavor-note">
+              <span>🍓</span>
+              <h3 data-i18n="note1Title">Warm Lights</h3>
+              <p data-i18n="note1Text">A soft place to rest after tiring days.</p>
+            </div>
+
+            <div class="flavor-note">
+              <span>🍦</span>
+              <h3 data-i18n="note2Title">Many Flavors</h3>
+              <p data-i18n="note2Text">Every friendship brings its own charm.</p>
+            </div>
+
+            <div class="flavor-note">
+              <span>🍒</span>
+              <h3 data-i18n="note3Title">Sweet Stories</h3>
+              <p data-i18n="note3Text">Laughter and memories are always welcome.</p>
+            </div>
+
+            <div class="flavor-note">
+              <span>🍨</span>
+              <h3 data-i18n="note4Title">Soft Healing</h3>
+              <p data-i18n="note4Text">Sometimes healing comes from simple things.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="scoopers">
+          <h2 class="section-title" data-i18n="scoopersTitle">The Scoopers 🍒</h2>
+          <p class="section-text" data-i18n="scoopersText">
+            Scoopers are the ones who patiently and thoughtfully serve every scoop. They are here not just to offer ice cream, but to make sure every Scoomie receives the warmth they need. Scoopers understand that everyone has their own taste and story, and their role is not to change that, but to welcome it with open arms. In the hands of Scoopers, even the most tiring day can feel a little sweeter.
+          </p>
+
+          <div class="caretaker-list">
+            <div class="caretaker">
+              <div class="scooper-photo-wrap">
+                <img class="scooper-photo" src="https://i.ibb.co.com/gbRvBxjj/CT-WEB.png" alt="Strawberry Scooper">
+              </div>
+              <h3>Strawberry</h3>
+              <p data-i18n="scooper1Text">The cheerful scooper who brings warmth and makes the room feel alive.</p>
+            </div>
+
+            <div class="caretaker">
+              <div class="scooper-photo-wrap">
+                <img class="scooper-photo" src="https://i.ibb.co.com/gbRvBxjj/CT-WEB.png" alt="Vanilla Scooper">
+              </div>
+              <h3>Vanilla</h3>
+              <p data-i18n="scooper2Text">The gentle scooper who is calm, tidy, and makes people feel safe.</p>
+            </div>
+
+            <div class="caretaker">
+              <div class="scooper-photo-wrap">
+                <img class="scooper-photo" src="https://i.ibb.co.com/gbRvBxjj/CT-WEB.png" alt="Matcha Scooper">
+              </div>
+              <h3>Matcha</h3>
+              <p data-i18n="scooper3Text">The calm scooper who loves keeping everything balanced.</p>
+            </div>
+
+            <div class="caretaker">
+              <div class="scooper-photo-wrap">
+                <img class="scooper-photo" src="https://i.ibb.co.com/gbRvBxjj/CT-WEB.png" alt="Blueberry Scooper">
+              </div>
+              <h3>Blueberry</h3>
+              <p data-i18n="scooper4Text">The creative scooper who loves unique ideas, cute details, and dreamy colors.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="rules">
+          <h2 class="section-title" data-i18n="rulesTitle">Sweet Rules 🧁</h2>
+          <p class="section-text" data-i18n="rulesText">
+            Before you grab your scoop, please read our sweet little guidelines to keep the store cozy for everyone.
+          </p>
+
+          <div class="rules-menu">
+            <div class="rule-shelf">
+              <h3 class="rule-shelf-title" data-i18n="generalRulesTitle">🍦 Sweet Scoops: Our General Guidelines</h3>
+
+              <ul class="rule-list">
+                <li data-i18n="generalRule1">We open our doors to all Gen!RP and Selective. Bring your unique flavor and join the fun!</li>
+                <li data-i18n="generalRule2">Stick to one head per account. Make sure it's your main account. Side accounts are welcome, provided they stay as active as the main one.</li>
+                <li data-i18n="generalRule3">Username, bio, and display name must be relevant to your muse.</li>
+                <li data-i18n="generalRule4">Love wins!</li>
+                <li data-i18n="generalRule5">You can update your character manually or by retweeting official posts, but manual updates show your love for the muse!</li>
+                <li data-i18n="generalRule6">Limit your OAs to a maximum of 3, including us, and SQs to 2. Group DM's squat don't count.</li>
+                <li data-i18n="generalRule7">Keep your social circle sweet—cap your following at 600. New accounts must show activity with 250 tweets and at least 50 followings.</li>
+                <li data-i18n="generalRule8">Absolutely no JFB, nickname/upfoll schemes, bots, or drama-seeking. Keep it chill! Please keep RL talk inside brackets and avoid interacting with non-RP content.</li>
+                <li data-i18n="generalRule9">NSFW content of any kind is strictly not allowed in our store. Let's keep this a cozy and comfortable space for everyone!</li>
+                <li data-i18n="generalRule10">Don't be a wallflower! Interact with at least 5 Scoomies daily. We encourage a wide circle, so avoid CIC habits.</li>
+                <li data-i18n="generalRule11">Active participation in games and missions is required. If you’re busy, just give us a heads-up!</li>
+                <li data-i18n="generalRule12">Must follow our main base, sub-base, and your fellow OAs once you're verified.</li>
+                <li data-i18n="generalRule13">Respect is the secret ingredient. Let’s keep this environment kind and delicious for everyone.</li>
+              </ul>
+            </div>
+
+            <div class="rule-shelf">
+              <h3 class="rule-shelf-title" data-i18n="activityRulesTitle">❄️ Chilling Out: Activity & Status Rules</h3>
+
+              <ul class="rule-list chill">
+                <li data-i18n="activityRule1">Semi Hiatus max 3 days, and Hiatus max 5 days. Longer breaks aren’t possible here.</li>
+                <li data-i18n="activityRule2">Temporary character swap is done a maximum 1x during the store, excluding other OA missions.</li>
+                <li data-i18n="activityRule3">Account move is only allowed maximum 2 times. Exception applies only if your account gets suspended or locked.</li>
+                <li data-i18n="activityRule4">Keep us in the loop if you change username, character, or move account.</li>
+                <li data-i18n="activityRule5">Username or move account is allowed 1 week after verification.</li>
+                <li data-i18n="activityRule6">Character change is allowed 3 days after verification.</li>
+              </ul>
+            </div>
+
+            <div class="rule-shelf">
+              <h3 class="rule-shelf-title" data-i18n="warningRulesTitle">⚠️ Don’t Let the Scoop Melt!: Warning & Unverification</h3>
+
+              <ul class="rule-list warning">
+                <li data-i18n="warningRule1">Drama, CIC, war, or breaking rules leads to instant unverification.</li>
+                <li data-i18n="warningRule2">Inactive for 24 hours after verification or hiatus period ends: unverified.</li>
+                <li data-i18n="warningRule3">Inactive for 3 days or 72 hours without notice: unverified.</li>
+                <li data-i18n="warningRule4">Deactivating your account without permission requires notifying us within 24 hours to avoid unverification.</li>
+                <li data-i18n="warningRule5">Not participating in activities twice without notice will result in a warning.</li>
+                <li data-i18n="warningRule6">Three warnings will lead to unverification.</li>
+              </ul>
+
+              <div class="rules-mini-note" data-i18n="rulesMiniNote">
+                Keep your scoop from melting: stay active, stay kind, and keep the store sweet. 🍨
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="footer">
+        <p data-i18n="footer">“Every flavor has its own charm, and so do you.”</p>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    const loader = document.getElementById("loader");
+    const site = document.getElementById("site");
+    const landing = document.getElementById("landing");
+    const mainPage = document.getElementById("mainPage");
+    const startBtn = document.getElementById("startBtn");
+    const langButtons = document.querySelectorAll(".lang-btn");
+    const bgMusic = document.getElementById("bgMusic");
+
+    const translations = {
+      en: {
+        landingTagline: "A tiny ice cream corner for tired hearts, soft friendships, and sweet little moments.",
+        startBtn: "START",
+        navConcept: "Concept",
+        navRules: "Rules",
+        navScoopers: "Scoopers",
+        badge: "🍦 welcome to our soft corner",
+        mainTitle: "ICE CREAM<br>FOR YOUR MOOD",
+        mainDesc: "SCOOPTHERAPIE is a tiny place made to be a sweet resting space. Here, every flavor has a story, every color has a feeling, and everyone is welcome to show up as themselves.",
+
+        conceptTitle: "Our Concept 🍨",
+        conceptStory: "When was the last time you truly paused and gave yourself space to feel a little lighter? This little ice cream shop is here to ease the weight of tiring days, with warm lights, bright colors, and a comforting space that welcomes you in. Like different flavors on display, friendships come in many forms, each bringing their own sweetness, energy, and charm. Here, laughter is shared easily, stories are always welcome, and sweet memories are made together. Because sometimes, the best kind of healing comes from simple things with a cold scoop of ice cream and people who choose to stay.",
+        note1Title: "Warm Lights",
+        note1Text: "A soft place to rest after tiring days.",
+        note2Title: "Many Flavors",
+        note2Text: "Every friendship brings its own charm.",
+        note3Title: "Sweet Stories",
+        note3Text: "Laughter and memories are always welcome.",
+        note4Title: "Soft Healing",
+        note4Text: "Sometimes healing comes from simple things.",
+
+        rulesTitle: "Sweet Rules 🧁",
+        rulesText: "Before you grab your scoop, please read our sweet little guidelines to keep the store cozy for everyone.",
+
+        generalRulesTitle: "🍦 Sweet Scoops: Our General Guidelines",
+        generalRule1: "We open our doors to all Gen!RP and Selective. Bring your unique flavor and join the fun!",
+        generalRule2: "Stick to one head per account. Make sure it's your main account. Side accounts are welcome, provided they stay as active as the main one.",
+        generalRule3: "Username, bio, and display name must be relevant to your muse.",
+        generalRule4: "Love wins!",
+        generalRule5: "You can update your character manually or by retweeting official posts, but manual updates show your love for the muse!",
+        generalRule6: "Limit your OAs to a maximum of 3, including us, and SQs to 2. Group DM's squat don't count.",
+        generalRule7: "Keep your social circle sweet—cap your following at 600. New accounts must show activity with 250 tweets and at least 50 followings.",
+        generalRule8: "Absolutely no JFB, nickname/upfoll schemes, bots, or drama-seeking. Keep it chill! Please keep RL talk inside brackets and avoid interacting with non-RP content.",
+        generalRule9: "NSFW content of any kind is strictly not allowed in our store. Let's keep this a cozy and comfortable space for everyone!",
+        generalRule10: "Don't be a wallflower! Interact with at least 5 Scoomies daily. We encourage a wide circle, so avoid CIC habits.",
+        generalRule11: "Active participation in games and missions is required. If you’re busy, just give us a heads-up!",
+        generalRule12: "Must follow our main base, sub-base, and your fellow OAs once you're verified.",
+        generalRule13: "Respect is the secret ingredient. Let’s keep this environment kind and delicious for everyone.",
+
+        activityRulesTitle: "❄️ Chilling Out: Activity & Status Rules",
+        activityRule1: "Semi Hiatus max 3 days, and Hiatus max 5 days. Longer breaks aren’t possible here.",
+        activityRule2: "Temporary character swap is done a maximum 1x during the store, excluding other OA missions.",
+        activityRule3: "Account move is only allowed maximum 2 times. Exception applies only if your account gets suspended or locked.",
+        activityRule4: "Keep us in the loop if you change username, character, or move account.",
+        activityRule5: "Username or move account is allowed 1 week after verification.",
+        activityRule6: "Character change is allowed 3 days after verification.",
+
+        warningRulesTitle: "⚠️ Don’t Let the Scoop Melt!: Warning & Unverification",
+        warningRule1: "Drama, CIC, war, or breaking rules leads to instant unverification.",
+        warningRule2: "Inactive for 24 hours after verification or hiatus period ends: unverified.",
+        warningRule3: "Inactive for 3 days or 72 hours without notice: unverified.",
+        warningRule4: "Deactivating your account without permission requires notifying us within 24 hours to avoid unverification.",
+        warningRule5: "Not participating in activities twice without notice will result in a warning.",
+        warningRule6: "Three warnings will lead to unverification.",
+        rulesMiniNote: "Keep your scoop from melting: stay active, stay kind, and keep the store sweet. 🍨",
+
+        scoopersTitle: "The Scoopers 🍒",
+        scoopersText: "Scoopers are the ones who patiently and thoughtfully serve every scoop. They are here not only to offer ice cream, but also to make sure every member receives the warmth they need. Scoopers understand that everyone has their own taste and story, and their role is not to change that, but to welcome it with open arms. In the hands of Scoopers, even the most tiring day can feel a little sweeter.",
+        scooper1Text: "The cheerful scooper who brings warmth and makes the room feel alive.",
+        scooper2Text: "The gentle scooper who is calm, tidy, and makes people feel safe.",
+        scooper3Text: "The calm scooper who loves keeping everything balanced.",
+        scooper4Text: "The creative scooper who loves unique ideas, cute details, and dreamy colors.",
+        footer: "“Every flavor has its own charm, and so do you.”"
+      },
+
+      id: {
+        landingTagline: "Sudut es krim kecil untuk hati yang lelah, persahabatan yang hangat, dan momen manis yang sederhana.",
+        startBtn: "MULAI",
+        navConcept: "Konsep",
+        navRules: "Rules",
+        navScoopers: "Scoopers",
+        badge: "🍦 selamat datang di sudut manis kami",
+        mainTitle: "ICE CREAM<br>FOR YOUR MOOD",
+        mainDesc: "SCOOPTHERAPIE adalah tempat kecil yang dibuat untuk jadi ruang istirahat yang manis. Di sini, setiap rasa punya cerita, setiap warna punya suasana, dan setiap orang boleh hadir dengan versi dirinya sendiri.",
+
+        conceptTitle: "Konsep Kami 🍨",
+        conceptStory: "Kapan terakhir kali kamu benar-benar berhenti dan memberi dirimu ruang untuk merasa lebih ringan? Kedai es krim kecil ini hadir untuk mengusir lelahnya hari, lewat suasana hangat, warna cerah, dan kenyamanan yang menyambutmu. Seperti berbagai rasa yang berjajar di etalase, persahabatan pun hadir dalam banyak bentuk, masing-masing membawa manis, energi, dan pesonanya sendiri. Di sini, tawa dibagi dengan mudah, cerita selalu diterima, dan kenangan manis tercipta bersama. Karena terkadang, hal yang paling menyembuhkan datang dari sesuatu yang sederhana dengan segelas es krim dingin dan orang-orang yang memilih untuk tetap tinggal.",
+        note1Title: "Warm Lights",
+        note1Text: "Ruang lembut untuk beristirahat setelah hari yang melelahkan.",
+        note2Title: "Many Flavors",
+        note2Text: "Setiap persahabatan membawa pesonanya sendiri.",
+        note3Title: "Sweet Stories",
+        note3Text: "Tawa dan cerita selalu diterima di sini.",
+        note4Title: "Soft Healing",
+        note4Text: "Kadang rasa sembuh datang dari hal sederhana.",
+
+        rulesTitle: "Sweet Rules 🧁",
+        rulesText: "Sebelum mengambil scoop-mu, baca dulu guidelines kecil ini supaya kedai tetap nyaman untuk semua orang.",
+
+        generalRulesTitle: "🍦 Sweet Scoops: General Guidelines",
+        generalRule1: "Kami membuka pintu untuk semua Gen!RP dan Selective. Bawa flavor unikmu dan ikut bersenang-senang!",
+        generalRule2: "Satu akun hanya untuk satu head. Pastikan itu akun utama. Side account diperbolehkan selama tetap aktif seperti akun utama.",
+        generalRule3: "Username, bio, dan display name harus relevan dengan muse kamu.",
+        generalRule4: "Love wins!",
+        generalRule5: "Kamu bisa update karakter secara manual atau dengan retweet post resmi, tapi update manual menunjukkan rasa sayangmu ke muse!",
+        generalRule6: "Maksimal OA adalah 3, termasuk kami, dan SQ maksimal 2. Group DM squat tidak dihitung.",
+        generalRule7: "Jaga circle-mu tetap sweet. Maksimal following 600. Untuk akun baru, tunjukkan keaktifan dengan 250 tweets dan minimal 50 followings.",
+        generalRule8: "Tidak boleh JFB, nickname/upfoll schemes, bot, atau mencari drama. Keep it chill! RL talk wajib di dalam bracket dan hindari interaksi dengan konten non-RP.",
+        generalRule9: "Konten NSFW dalam bentuk apa pun tidak diperbolehkan di store kami. Mari jaga ruang ini tetap cozy dan nyaman untuk semua orang!",
+        generalRule10: "Jangan jadi wallflower! Interaksi dengan minimal 5 Scoomies setiap hari. Kami mendukung circle yang luas, jadi hindari kebiasaan CIC.",
+        generalRule11: "Wajib aktif berpartisipasi dalam games dan missions. Kalau sedang sibuk, beri kami kabar!",
+        generalRule12: "Wajib follow main base, sub-base, dan sesama OA setelah verified.",
+        generalRule13: "Respect adalah secret ingredient. Mari jaga lingkungan ini tetap baik dan menyenangkan untuk semua orang.",
+
+        activityRulesTitle: "❄️ Chilling Out: Activity & Status Rules",
+        activityRule1: "Semi Hiatus maksimal 3 hari, dan Hiatus maksimal 5 hari. Break lebih lama tidak bisa dilakukan di sini.",
+        activityRule2: "Temporary character swap maksimal 1x selama store berlangsung, tidak termasuk mission dari OA lain.",
+        activityRule3: "Pindah akun hanya diperbolehkan maksimal 2 kali. Pengecualian berlaku jika akun terkena suspend atau locked.",
+        activityRule4: "Beri tahu kami jika kamu mengganti username, character, atau pindah akun.",
+        activityRule5: "Ganti username atau move account diperbolehkan 1 minggu setelah verification.",
+        activityRule6: "Ganti character diperbolehkan 3 hari setelah verification.",
+
+        warningRulesTitle: "⚠️ Don’t Let the Scoop Melt!: Warning & Unverification",
+        warningRule1: "Drama, CIC, war, atau melanggar rules akan menyebabkan unverification secara langsung.",
+        warningRule2: "Tidak aktif selama 24 jam setelah verification atau setelah masa hiatus berakhir akan dikenakan unverification.",
+        warningRule3: "Tidak aktif selama 3 hari atau 72 jam tanpa kabar akan dikenakan unverification.",
+        warningRule4: "Jika deactivate akun tanpa izin, kamu wajib memberi tahu kami dalam 24 jam agar tidak terkena unverification.",
+        warningRule5: "Tidak mengikuti activity sebanyak dua kali tanpa kabar akan mendapatkan warning.",
+        warningRule6: "Tiga warning akan berujung pada unverification.",
+        rulesMiniNote: "Jangan biarkan scoop-mu meleleh: tetap aktif, tetap baik, dan jaga store ini tetap sweet. 🍨",
+
+        scoopersTitle: "The Scoopers 🍒",
+        scoopersText: "Scoopers adalah mereka yang dengan sabar dan penuh perhatian menyajikan setiap scoop. Mereka hadir bukan hanya untuk menawarkan es krim, tetapi juga untuk memastikan setiap member mendapatkan kehangatan yang mereka butuhkan. Scoopers memahami bahwa setiap orang memiliki selera dan cerita masing-masing, dan peran mereka bukan untuk mengubah itu, melainkan menyambutnya dengan tangan terbuka. Di tangan Scoopers, bahkan hari yang paling melelahkan pun bisa terasa sedikit lebih manis.",
+        scooper1Text: "Scooper yang ceria, hangat, dan suka bikin suasana jadi ramai.",
+        scooper2Text: "Scooper yang lembut, tenang, rapi, dan selalu bikin orang merasa aman.",
+        scooper3Text: "Scooper yang calm thinker dan suka menjaga semuanya tetap seimbang.",
+        scooper4Text: "Scooper yang kreatif, suka ide unik, detail lucu, dan warna gemes.",
+        footer: "“Setiap rasa punya pesonanya sendiri, begitu juga kamu.”"
+      }
+    };
+
+    let currentLanguage = "en";
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.documentElement.lang = lang === "id" ? "id" : "en";
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.getAttribute("data-i18n");
+
+        if (translations[lang][key]) {
+          element.innerHTML = translations[lang][key];
+        }
+      });
+
+      langButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === lang);
+      });
+    }
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setLanguage(button.dataset.lang);
+      });
+    });
+
+    window.addEventListener("load", () => {
+      setLanguage("en");
+
+      setTimeout(() => {
+        loader.classList.add("hide");
+        site.classList.add("show");
+      }, 2500);
+    });
+
+    startBtn.addEventListener("click", () => {
+      landing.style.display = "none";
+      mainPage.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      if (bgMusic) {
+    bgMusic.volume = 0.45;
+    bgMusic.play().catch(() => {
+      console.log("Music autoplay was blocked by the browser.");
+        });
+      }
+    });
+  </script>
+</body>
+</html>
