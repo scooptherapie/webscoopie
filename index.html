@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <meta name="theme-color" content="#ffd9e8">
+  <meta name="msapplication-TileColor" content="#ffd9e8">
   <title>SCOOPTHERAPIE</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +20,24 @@
       padding: 0;
       box-sizing: border-box;
     }
+
+    html {
+    color-scheme: light only;
+    background: #ffd9e8;
+  }
+  
+  body {
+    color-scheme: light only;
+    forced-color-adjust: none;
+    -webkit-text-size-adjust: 100%;
+    background-color: #ffd9e8;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    forced-color-adjust: none;
+}
 
     :root {
       --pink-1: #ffffff;
@@ -1254,6 +1277,32 @@
       color: var(--coral);
     }
 
+    /* FIX WARNA BIAR TETAP LIGHT/PASTEL DI IN-APP BROWSER */
+button,
+a,
+.lang-btn,
+.start-btn,
+.nav a,
+.panel,
+.landing-card,
+.rule-shelf,
+.caretaker,
+.flavor-note,
+.concept-story,
+.language-switch {
+  color-scheme: light only;
+  forced-color-adjust: none;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+img {
+  forced-color-adjust: none;
+}
+    
     @media (max-width: 860px) {
       .hero-main {
         grid-template-columns: 1fr;
@@ -1821,6 +1870,8 @@
         });
       }
     });
+    document.documentElement.style.colorScheme = "light";
+    document.body.style.colorScheme = "light";
   </script>
 </body>
 </html>
