@@ -1175,8 +1175,8 @@
       width: 100%;
       aspect-ratio: 1 / 1;
       padding: 10px;
-      margin: 0 auto 14px;
-      border-radius: 28px;
+      margin: 0 auto 12px;
+      border-radius: 26px;
       background:
         radial-gradient(circle at 20% 18%, rgba(255,255,255,.9) 0 12%, transparent 34%),
         linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,217,232,.65));
@@ -1185,16 +1185,25 @@
       overflow: hidden;
       position: relative;
       transition: transform .22s ease;
+      cursor: pointer;
     }
 
     .scooper-photo-wrap::after {
-      content: "🍦";
+      content: "tap me 🍦";
       position: absolute;
-      right: 10px;
-      bottom: 8px;
-      font-size: 28px;
-      opacity: .75;
-      filter: drop-shadow(0 3px 0 rgba(255,255,255,.8));
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      width: max-content;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-family: "Chewy", cursive;
+      font-size: 15px;
+      color: white;
+      background: rgba(221, 123, 149, .9);
+      box-shadow: 0 4px 0 rgba(255,255,255,.82);
+      opacity: .95;
+      pointer-events: none;
     }
 
     .scooper-photo {
@@ -1203,12 +1212,22 @@
       object-fit: cover;
       object-position: center;
       display: block;
-      border-radius: 20px;
+      border-radius: 18px;
       background: rgba(255,255,255,.5);
     }
 
-    .caretaker {
+    #scoopers .caretaker {
+      padding: 14px;
       transition: transform .22s ease, background .22s ease;
+    }
+
+    #scoopers .caretaker h3 {
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+
+    #scoopers .caretaker p {
+      display: none;
     }
 
     .caretaker:hover {
@@ -1218,6 +1237,123 @@
 
     .caretaker:hover .scooper-photo-wrap {
       transform: translateY(-5px) rotate(-1deg);
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    .scooper-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(122, 71, 93, .44);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .scooper-modal.show {
+      display: flex;
+    }
+
+    .scooper-modal-card {
+      width: min(440px, 94vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 18px;
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255,255,255,.96) 0 12%, transparent 30%),
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,217,232,.94));
+      border: 4px solid rgba(255,255,255,.92);
+      box-shadow: 0 30px 90px rgba(122, 71, 93, .38);
+      position: relative;
+      text-align: center;
+      animation: scooperPopup .24s ease;
+    }
+
+    @keyframes scooperPopup {
+      from {
+        opacity: 0;
+        transform: scale(.88) translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .scooper-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff9bc0, #ff6f9f);
+      color: white;
+      font-family: "Chewy", cursive;
+      font-size: 26px;
+      line-height: 1;
+      box-shadow: 0 5px 0 rgba(221,123,149,.55);
+      z-index: 3;
+    }
+
+    .scooper-modal-photo-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,.9) 0 12%, transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,217,232,.72));
+      border: 4px solid rgba(255,255,255,.95);
+      box-shadow: 0 16px 32px rgba(154,78,108,.16);
+      overflow: hidden;
+    }
+
+    .scooper-modal-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border-radius: 22px;
+    }
+
+    #modalScooperName {
+      font-family: "Chewy", cursive;
+      font-size: clamp(32px, 7vw, 44px);
+      color: var(--rose);
+      text-shadow: 0 4px 0 rgba(255,255,255,.85);
+      margin-bottom: 8px;
+    }
+
+    #modalScooperText {
+      font-size: 17px;
+      line-height: 1.45;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 18px;
+    }
+
+    .scooper-close-text {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 24px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--mint), var(--mint-dark));
+      color: white;
+      font-family: "Chewy", cursive;
+      font-size: 22px;
+      box-shadow: 0 7px 0 #5b968a;
     }
 
     .avatar {
@@ -1277,31 +1413,210 @@
       color: var(--coral);
     }
 
-    /* FIX WARNA BIAR TETAP LIGHT/PASTEL DI IN-APP BROWSER */
-button,
-a,
-.lang-btn,
-.start-btn,
-.nav a,
-.panel,
-.landing-card,
-.rule-shelf,
-.caretaker,
-.flavor-note,
-.concept-story,
-.language-switch {
-  color-scheme: light only;
-  forced-color-adjust: none;
-}
+    /* FIX TOTAL: WARNA TETAP LIGHT/PASTEL DI DARK MODE & IN-APP BROWSER */
+    :root,
+    html,
+    body {
+      color-scheme: light only !important;
+      forced-color-adjust: none !important;
+      background-color: #ffd9e8 !important;
+    }
 
-button {
-  -webkit-appearance: none;
-  appearance: none;
-}
+    html {
+      background: #ffd9e8 !important;
+    }
 
-img {
-  forced-color-adjust: none;
-}
+    body {
+      color: var(--brown) !important;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.95) 0 8%, transparent 20%),
+        radial-gradient(circle at 88% 24%, rgba(255,255,255,.9) 0 7%, transparent 18%),
+        radial-gradient(circle at 16% 78%, rgba(255,255,255,.9) 0 9%, transparent 22%),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,.75) 0 8%, transparent 20%),
+        linear-gradient(135deg, #ffffff 0%, #ffd9e8 23%, #f8b7cf 50%, #ffdceb 75%, #ffffff 100%) !important;
+      -webkit-text-size-adjust: 100%;
+      forced-color-adjust: none !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      color-scheme: light only !important;
+      forced-color-adjust: none !important;
+    }
+
+    button,
+    a,
+    img,
+    svg,
+    .site,
+    .page-loader,
+    .language-switch,
+    .landing-card,
+    .panel,
+    .intro-panel,
+    .flavor-window,
+    .concept-story,
+    .flavor-note,
+    .rule-shelf,
+    .caretaker,
+    .footer,
+    .scooper-modal,
+    .scooper-modal-card,
+    .scooper-modal-photo-wrap,
+    .scooper-photo-wrap {
+      color-scheme: light only !important;
+      forced-color-adjust: none !important;
+    }
+
+    .page-loader {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.95) 0 8%, transparent 20%),
+        radial-gradient(circle at 88% 24%, rgba(255,255,255,.9) 0 7%, transparent 18%),
+        radial-gradient(circle at 16% 78%, rgba(255,255,255,.9) 0 9%, transparent 22%),
+        radial-gradient(circle at 82% 72%, rgba(255,255,255,.75) 0 8%, transparent 20%),
+        linear-gradient(135deg, #ffffff 0%, #ffd9e8 23%, #f8b7cf 50%, #ffdceb 75%, #ffffff 100%) !important;
+    }
+
+    .landing-card,
+    .panel,
+    .language-switch {
+      background: rgba(255,255,255,.48) !important;
+      border-color: rgba(255,255,255,.75) !important;
+    }
+
+    .flavor-note,
+    .caretaker,
+    .rule-shelf {
+      background: rgba(255,255,255,.62) !important;
+      border-color: rgba(255,255,255,.86) !important;
+    }
+
+    .concept-story {
+      background:
+        radial-gradient(circle at 12% 20%, rgba(255,255,255,.9) 0 12%, transparent 28%),
+        linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,252,229,.62)) !important;
+    }
+
+    .scooper-modal {
+      background: rgba(122, 71, 93, .44) !important;
+    }
+
+    .scooper-modal-card {
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255,255,255,.96) 0 12%, transparent 30%),
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,217,232,.94)) !important;
+    }
+
+    .scooper-photo-wrap,
+    .scooper-modal-photo-wrap {
+      background:
+        radial-gradient(circle at 20% 18%, rgba(255,255,255,.9) 0 12%, transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,217,232,.72)) !important;
+    }
+
+    .brand,
+    .main-title,
+    .topbar-logo,
+    .flavor-note h3 {
+      color: var(--blue) !important;
+    }
+
+    .section-title,
+    .caretaker h3,
+    #modalScooperName {
+      color: var(--rose) !important;
+    }
+
+    body,
+    .section-text,
+    .rule-list li,
+    .flavor-note p,
+    .caretaker p,
+    #modalScooperText,
+    .nav a,
+    .lang-btn {
+      color: var(--brown) !important;
+    }
+
+    .tagline,
+    .main-desc,
+    .concept-story p,
+    .footer p,
+    .rules-mini-note {
+      color: var(--coral) !important;
+    }
+
+    .start-btn,
+    .back-btn,
+    .lang-btn.active,
+    .scooper-close-text {
+      color: #ffffff !important;
+      background: linear-gradient(180deg, var(--mint), var(--mint-dark)) !important;
+    }
+
+    .scooper-close {
+      color: #ffffff !important;
+      background: linear-gradient(180deg, #ff9bc0, #ff6f9f) !important;
+    }
+
+    button {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+    }
+
+    img {
+      forced-color-adjust: none !important;
+      filter: none !important;
+      mix-blend-mode: normal !important;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root,
+      html,
+      body {
+        color-scheme: light only !important;
+        background-color: #ffd9e8 !important;
+      }
+
+      body {
+        color: var(--brown) !important;
+        background:
+          radial-gradient(circle at 12% 18%, rgba(255,255,255,.95) 0 8%, transparent 20%),
+          radial-gradient(circle at 88% 24%, rgba(255,255,255,.9) 0 7%, transparent 18%),
+          radial-gradient(circle at 16% 78%, rgba(255,255,255,.9) 0 9%, transparent 22%),
+          radial-gradient(circle at 82% 72%, rgba(255,255,255,.75) 0 8%, transparent 20%),
+          linear-gradient(135deg, #ffffff 0%, #ffd9e8 23%, #f8b7cf 50%, #ffdceb 75%, #ffffff 100%) !important;
+      }
+
+      .page-loader {
+        background:
+          radial-gradient(circle at 12% 18%, rgba(255,255,255,.95) 0 8%, transparent 20%),
+          radial-gradient(circle at 88% 24%, rgba(255,255,255,.9) 0 7%, transparent 18%),
+          radial-gradient(circle at 16% 78%, rgba(255,255,255,.9) 0 9%, transparent 22%),
+          radial-gradient(circle at 82% 72%, rgba(255,255,255,.75) 0 8%, transparent 20%),
+          linear-gradient(135deg, #ffffff 0%, #ffd9e8 23%, #f8b7cf 50%, #ffdceb 75%, #ffffff 100%) !important;
+      }
+
+      .landing-card,
+      .panel,
+      .language-switch {
+        background: rgba(255,255,255,.48) !important;
+        border-color: rgba(255,255,255,.75) !important;
+      }
+
+      .flavor-note,
+      .caretaker,
+      .rule-shelf {
+        background: rgba(255,255,255,.62) !important;
+      }
+
+      .scooper-modal-card {
+        background:
+          radial-gradient(circle at 12% 12%, rgba(255,255,255,.96) 0 12%, transparent 30%),
+          linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,217,232,.94)) !important;
+      }
+    }
     
     @media (max-width: 860px) {
       .hero-main {
@@ -1390,6 +1705,24 @@ img {
       .triple-logo-landing .ice-cup .scoop-b {
         right: 6px;
         bottom: 18px;
+      }
+
+
+      #scoopers .caretaker {
+        padding: 12px;
+      }
+
+      #scoopers .scooper-photo-wrap {
+        border-radius: 24px;
+      }
+
+      .scooper-modal {
+        padding: 14px;
+      }
+
+      .scooper-modal-card {
+        border-radius: 30px;
+        padding: 15px;
       }
 
       .rule-shelf {
@@ -1584,35 +1917,31 @@ img {
 
           <div class="caretaker-list">
             <div class="caretaker">
-              <div class="scooper-photo-wrap">
-                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/6f56588b81d68345ca8742395733ef73212a3053/RUBY.png" alt="Strawberry Scooper">
+              <div class="scooper-photo-wrap" role="button" tabindex="0" data-name="RUBY ROSELLA" data-text-key="scooper1Text">
+                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/7785fa36c76122c8d14bfe29cca0e48c53c3ef49/RUBY%20WEB.png" alt="Ruby Rosella">
               </div>
               <h3>RUBY ROSELLA</h3>
-              <p data-i18n="scooper1Text">The cheerful scooper who brings warmth and makes the room feel alive.</p>
             </div>
 
             <div class="caretaker">
-              <div class="scooper-photo-wrap">
-                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/6f56588b81d68345ca8742395733ef73212a3053/MATCHA.png" alt="Vanilla Scooper">
+              <div class="scooper-photo-wrap" role="button" tabindex="0" data-name="MATCHA RUELL" data-text-key="scooper2Text">
+                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/7785fa36c76122c8d14bfe29cca0e48c53c3ef49/MATCHA%20WEB.png" alt="Matcha Ruell">
               </div>
-              <h3>MATCHA</h3>
-              <p data-i18n="scooper2Text">The gentle scooper who is calm, tidy, and makes people feel safe.</p>
+              <h3>MATCHA RUELL</h3>
             </div>
 
             <div class="caretaker">
-              <div class="scooper-photo-wrap">
-                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/6f56588b81d68345ca8742395733ef73212a3053/CARAMEL.png" alt="Matcha Scooper">
+              <div class="scooper-photo-wrap" role="button" tabindex="0" data-name="CARAMEL SOLENNE" data-text-key="scooper3Text">
+                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/7785fa36c76122c8d14bfe29cca0e48c53c3ef49/CARAMEL%20WEB.png" alt="Caramel Solenne">
               </div>
-              <h3>CARAMEL</h3>
-              <p data-i18n="scooper3Text">The calm scooper who loves keeping everything balanced.</p>
+              <h3>CARAMEL SOLENNE</h3>
             </div>
 
             <div class="caretaker">
-              <div class="scooper-photo-wrap">
-                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/6f56588b81d68345ca8742395733ef73212a3053/MICO.png" alt="Blueberry Scooper">
+              <div class="scooper-photo-wrap" role="button" tabindex="0" data-name="HAZELLYN MICO" data-text-key="scooper4Text">
+                <img class="scooper-photo" src="https://raw.githubusercontent.com/scooptherapie/webscoopie/7785fa36c76122c8d14bfe29cca0e48c53c3ef49/MICO%20WEB.png" alt="Hazellyn Mico">
               </div>
               <h3>HAZELLYN MICO</h3>
-              <p data-i18n="scooper4Text">The creative scooper who loves unique ideas, cute details, and dreamy colors.</p>
             </div>
           </div>
         </section>
@@ -1633,7 +1962,7 @@ img {
                 <li data-i18n="generalRule3">Username, bio, and display name must be relevant to your muse.</li>
                 <li data-i18n="generalRule4">Love wins!</li>
                 <li data-i18n="generalRule5">You can update your character manually or by retweeting official posts, but manual updates show your love for the muse!</li>
-                <li data-i18n="generalRule6">Limit your OAs to a maximum of 3, including us, and SQs to 2. Group DM's squat don't count.</li>
+                <li data-i18n="generalRule6">Limit your OAs to a maximum of 3, including us, and SQs to 2. Group DM's squad don't count.</li>
                 <li data-i18n="generalRule7">Keep your social circle sweet—cap your following at 600. New accounts must show activity with 250 tweets and at least 50 followings.</li>
                 <li data-i18n="generalRule8">Absolutely no JFB, nickname/upfoll schemes, bots, or drama-seeking. Keep it chill! Please keep RL talk inside brackets and avoid interacting with non-RP content.</li>
                 <li data-i18n="generalRule9">NSFW content of any kind is strictly not allowed in our store. Let's keep this a cozy and comfortable space for everyone!</li>
@@ -1670,7 +1999,7 @@ img {
               </ul>
 
               <div class="rules-mini-note" data-i18n="rulesMiniNote">
-                Keep your scoop from melting: stay active, stay kind, and keep the store sweet. 🍨
+                Keep your scoop from melting: stay active, stay kind, and keep this bar the sweet escape it was meant to be. 🍨
               </div>
             </div>
           </div>
@@ -1683,6 +2012,21 @@ img {
     </section>
   </main>
 
+  <div class="scooper-modal" id="scooperModal" aria-hidden="true">
+    <div class="scooper-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalScooperName">
+      <button class="scooper-close" id="scooperClose" type="button" aria-label="Close">×</button>
+
+      <div class="scooper-modal-photo-wrap">
+        <img id="modalScooperPhoto" src="" alt="">
+      </div>
+
+      <h3 id="modalScooperName">Scooper Name</h3>
+      <p id="modalScooperText">Scooper description</p>
+
+      <button class="scooper-close-text" id="scooperCloseText" type="button">close (x)</button>
+    </div>
+  </div>
+
   <script>
     const loader = document.getElementById("loader");
     const site = document.getElementById("site");
@@ -1691,6 +2035,12 @@ img {
     const startBtn = document.getElementById("startBtn");
     const langButtons = document.querySelectorAll(".lang-btn");
     const bgMusic = document.getElementById("bgMusic");
+    const scooperModal = document.getElementById("scooperModal");
+    const modalScooperPhoto = document.getElementById("modalScooperPhoto");
+    const modalScooperName = document.getElementById("modalScooperName");
+    const modalScooperText = document.getElementById("modalScooperText");
+    const scooperClose = document.getElementById("scooperClose");
+    const scooperCloseText = document.getElementById("scooperCloseText");
 
     const translations = {
       en: {
@@ -1723,7 +2073,7 @@ img {
         generalRule3: "Username, bio, and display name must be relevant to your muse.",
         generalRule4: "Love wins!",
         generalRule5: "You can update your character manually or by retweeting official posts, but manual updates show your love for the muse!",
-        generalRule6: "Limit your OAs to a maximum of 3, including us, and SQs to 2. Group DM's squat don't count.",
+        generalRule6: "Limit your OAs to a maximum of 3, including us, and SQs to 2. Group DM's squad don't count.",
         generalRule7: "Keep your social circle sweet—cap your following at 600. New accounts must show activity with 250 tweets and at least 50 followings.",
         generalRule8: "Absolutely no JFB, nickname/upfoll schemes, bots, or drama-seeking. Keep it chill! Please keep RL talk inside brackets and avoid interacting with non-RP content.",
         generalRule9: "NSFW content of any kind is strictly not allowed in our store. Let's keep this a cozy and comfortable space for everyone!",
@@ -1747,7 +2097,7 @@ img {
         warningRule4: "Deactivating your account without permission requires notifying us within 24 hours to avoid unverification.",
         warningRule5: "Not participating in activities twice without notice will result in a warning.",
         warningRule6: "Three warnings will lead to unverification.",
-        rulesMiniNote: "Keep your scoop from melting: stay active, stay kind, and keep the store sweet. 🍨",
+        rulesMiniNote: "Keep your scoop from melting: stay active, stay kind, and keep this bar the sweet escape it was meant to be. 🍨",
 
         scoopersTitle: "The Scoopers 🍒",
         scoopersText: "Scoopers are the ones who patiently and thoughtfully serve every scoop. They are here not only to offer ice cream, but also to make sure every member receives the warmth they need. Scoopers understand that everyone has their own taste and story, and their role is not to change that, but to welcome it with open arms. In the hands of Scoopers, even the most tiring day can feel a little sweeter.",
@@ -1788,7 +2138,7 @@ img {
         generalRule3: "Username, bio, dan display name harus relevan dengan muse kamu.",
         generalRule4: "Love wins!",
         generalRule5: "Kamu bisa update karakter secara manual atau dengan retweet post resmi, tapi update manual menunjukkan rasa sayangmu ke muse!",
-        generalRule6: "Maksimal OA adalah 3, termasuk kami, dan SQ maksimal 2. Group DM squat tidak dihitung.",
+        generalRule6: "Maksimal OA adalah 3, termasuk kami, dan SQ maksimal 2. Group DM squad tidak dihitung.",
         generalRule7: "Jaga circle-mu tetap sweet. Maksimal following 600. Untuk akun baru, tunjukkan keaktifan dengan 250 tweets dan minimal 50 followings.",
         generalRule8: "Tidak boleh JFB, nickname/upfoll schemes, bot, atau mencari drama. Keep it chill! RL talk wajib di dalam bracket dan hindari interaksi dengan konten non-RP.",
         generalRule9: "Konten NSFW dalam bentuk apa pun tidak diperbolehkan di store kami. Mari jaga ruang ini tetap cozy dan nyaman untuk semua orang!",
@@ -1812,7 +2162,7 @@ img {
         warningRule4: "Jika deactivate akun tanpa izin, kamu wajib memberi tahu kami dalam 24 jam agar tidak terkena unverification.",
         warningRule5: "Tidak mengikuti activity sebanyak dua kali tanpa kabar akan mendapatkan warning.",
         warningRule6: "Tiga warning akan berujung pada unverification.",
-        rulesMiniNote: "Jangan biarkan scoop-mu meleleh: tetap aktif, tetap baik, dan jaga store ini tetap sweet. 🍨",
+        rulesMiniNote: "Jangan biarkan scoop-mu meleleh: tetap aktif, tetap baik, dan biarkan bar ini menjadi tempat pelarian manis yang nyaman untuk semua.🍨",
 
         scoopersTitle: "The Scoopers 🍒",
         scoopersText: "Scoopers adalah mereka yang dengan sabar dan penuh perhatian menyajikan setiap scoop. Mereka hadir bukan hanya untuk menawarkan es krim, tetapi juga untuk memastikan setiap member mendapatkan kehangatan yang mereka butuhkan. Scoopers memahami bahwa setiap orang memiliki selera dan cerita masing-masing, dan peran mereka bukan untuk mengubah itu, melainkan menyambutnya dengan tangan terbuka. Di tangan Scoopers, bahkan hari yang paling melelahkan pun bisa terasa sedikit lebih manis.",
@@ -1870,6 +2220,57 @@ img {
         });
       }
     });
+
+    function openScooperPopup(photoWrap) {
+      const image = photoWrap.querySelector(".scooper-photo");
+      const name = photoWrap.dataset.name || "";
+      const textKey = photoWrap.dataset.textKey || "";
+      const description = translations[currentLanguage][textKey] || "";
+
+      modalScooperPhoto.src = image.src;
+      modalScooperPhoto.alt = image.alt || name;
+      modalScooperName.textContent = name;
+      modalScooperText.innerHTML = description;
+
+      scooperModal.classList.add("show");
+      scooperModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeScooperPopup() {
+      scooperModal.classList.remove("show");
+      scooperModal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    document.querySelectorAll(".scooper-photo-wrap").forEach((photoWrap) => {
+      photoWrap.addEventListener("click", () => {
+        openScooperPopup(photoWrap);
+      });
+
+      photoWrap.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openScooperPopup(photoWrap);
+        }
+      });
+    });
+
+    scooperClose.addEventListener("click", closeScooperPopup);
+    scooperCloseText.addEventListener("click", closeScooperPopup);
+
+    scooperModal.addEventListener("click", (event) => {
+      if (event.target === scooperModal) {
+        closeScooperPopup();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && scooperModal.classList.contains("show")) {
+        closeScooperPopup();
+      }
+    });
+
     document.documentElement.style.colorScheme = "light";
     document.body.style.colorScheme = "light";
   </script>
